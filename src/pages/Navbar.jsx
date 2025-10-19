@@ -7,7 +7,7 @@ const Navbar = ({ activePage }) => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);  // Trigger after 50px scroll
+      setIsScrolled(window.scrollY > 50);  
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -17,7 +17,6 @@ const Navbar = ({ activePage }) => {
   return (
     <nav className="sticky top-0 z-20">
       <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-        {/* Mobile Menu Button */}
         <div className="md:hidden">
           <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-navy hover:text-teal">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -26,7 +25,6 @@ const Navbar = ({ activePage }) => {
           </button>
         </div>
 
-        {/* Desktop Nav - Centered */}
         <div className="hidden md:flex justify-center flex-1">
           {!isScrolled ? (
             <div className="flex space-x-6 items-center">
@@ -38,7 +36,7 @@ const Navbar = ({ activePage }) => {
           ) : (
             <div className="relative">
               <div className="absolute -left-4 top-1/2 transform -translate-y-1/2 w-2 h-2 bg-white rounded-full shadow-lg z-10"></div>
-              <div className="bg-gradient-to-r from-green-400 to-green-500 rounded-full px-8 py-3 flex items-center space-x-6 shadow-lg">
+              <div className="bg-gradient-to-r from-blue-600 to-blue-400 rounded-full px-8 py-3 flex items-center space-x-6 shadow-lg">
                 <Link to="/" className={`text-white hover:text-gray-200 font-medium transition-colors ${activePage === 'home' ? 'text-gray-200 font-bold' : ''}`}>Home</Link>
                 <Link to="/soulwhispers" className={`text-white hover:text-gray-200 font-medium transition-colors ${activePage === 'soulwhispers' ? 'text-gray-200 font-bold' : ''}`}>SoulWhispers</Link>
               <Link to="/gymkey" className={`text-white hover:text-gray-200 font-medium transition-colors ${activePage === 'gymkey' ? 'text-gray-200 font-bold' : ''}`}>GymKey</Link>
@@ -49,7 +47,6 @@ const Navbar = ({ activePage }) => {
         )}
         </div>
 
-        {/* Mobile Menu Dropdown */}
         {isMobileMenuOpen && (
           <div className="md:hidden absolute top-full left-0 w-full bg-white border-t border-gray-200 z-10">
             <div className="px-4 py-4 space-y-4">

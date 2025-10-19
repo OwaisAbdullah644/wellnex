@@ -10,18 +10,17 @@ import WhatsComingNext from '../components/WhatsComingNext';
 import Testimonials from '../components/Testimonials';
 import StayConnected from '../components/StayConnected';
 
-// ProgressBar Component
 const ProgressBar = () => {
-  const { scrollYProgress } = useScroll();  // Get scroll progress (0 to 1)
+  const { scrollYProgress } = useScroll();  
 
   return (
     <motion.div
-      className="fixed top-0 left-0 w-full h-1 z-50 bg-green-700"
-      style={{ scaleX: scrollYProgress }}  // Scales from 0 to 1 as you scroll
+      className="fixed top-0 left-0 w-full h-1 z-50 bg-blue-700"
+      style={{ scaleX: scrollYProgress }}  
       initial={{ scaleX: 0 }}
     >
       <motion.div
-        className="h-full bg-gradient-to-r from-teal to-sage"  // Teal to sage gradient fill
+        className="h-full bg-gradient-to-r from-teal to-sage"  
         style={{ scaleX: scrollYProgress }}
       />
     </motion.div>
