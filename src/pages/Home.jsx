@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, useScroll } from 'framer-motion';
 import Navbar from '../pages/Navbar';
 import Footer from '../pages/Footer';
 import Hero from '../components/Hero';
@@ -10,9 +10,28 @@ import WhatsComingNext from '../components/WhatsComingNext';
 import Testimonials from '../components/Testimonials';
 import StayConnected from '../components/StayConnected';
 
-const Home = ({activePage}) => {
+// ProgressBar Component
+const ProgressBar = () => {
+  const { scrollYProgress } = useScroll();  // Get scroll progress (0 to 1)
+
+  return (
+    <motion.div
+      className="fixed top-0 left-0 w-full h-1 z-50 bg-green-700"
+      style={{ scaleX: scrollYProgress }}  // Scales from 0 to 1 as you scroll
+      initial={{ scaleX: 0 }}
+    >
+      <motion.div
+        className="h-full bg-gradient-to-r from-teal to-sage"  // Teal to sage gradient fill
+        style={{ scaleX: scrollYProgress }}
+      />
+    </motion.div>
+  );
+};
+
+const Home = ({ activePage }) => {
   return (
     <div className="min-h-screen bg-gray-50 text-navy">
+      <ProgressBar /> 
       <Navbar activePage="home" />
       <Hero />
       <About />
