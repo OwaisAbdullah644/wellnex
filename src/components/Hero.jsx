@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Hero = () => {
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
     <section className="relative min-h-screen flex flex-col md:flex-row items-center justify-between bg-gradient-to-br from-blue-950 via-slate-900 to-blue-800 text-white overflow-hidden px-8 md:px-16">
 
@@ -20,13 +22,53 @@ const Hero = () => {
         transition={{ duration: 1 }}
         className="flex-1 flex justify-center relative z-10"
       >
-        <div className="relative w-[400px] h-[400px] rounded-full bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_0_100px_rgba(56,189,248,0.3)]">
-          <DotLottieReact
-            src="https://lottie.host/621877b8-483c-4a67-a546-fd91ccdb9178/uaDzo5rpJb.lottie"
-            loop
-            autoplay
-            style={{ width: "100%", height: "100%" }}
-          />
+        <div
+          className="relative w-[400px] h-[400px] rounded-full bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_0_100px_rgba(56,189,248,0.3)] overflow-hidden cursor-pointer"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          title="Hover to switch animation"
+        >
+          <AnimatePresence mode="wait">
+            {!isHovered ? (
+              <motion.div
+                key="rabbit"
+                className="absolute inset-0 flex justify-center items-center"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.6 }}
+              >
+                <DotLottieReact
+                  src="https://lottie.host/621877b8-483c-4a67-a546-fd91ccdb9178/uaDzo5rpJb.lottie"
+                  loop
+                  autoplay
+                  style={{ width: "85%", height: "85%" }}
+                />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="tech"
+                className="absolute inset-0 flex justify-center items-center"
+                initial={{ opacity: 0 }}
+                animate={{
+                  opacity: 1,
+                  rotate: [0, 360],
+                }}
+                exit={{ opacity: 0 }}
+                transition={{
+                  opacity: { duration: 0.6 },
+                  rotate: { duration: 6, repeat: Infinity, ease: "linear" },
+                }}
+              >
+                <DotLottieReact
+                  src="https://lottie.host/605bd79e-0bb9-459a-802c-046f08bac07c/JYgSXP3vEh.lottie"
+                  loop
+                  autoplay
+                  style={{ width: "85%", height: "85%" }}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </motion.div>
 
