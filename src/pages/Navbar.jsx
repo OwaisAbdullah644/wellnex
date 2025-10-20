@@ -18,11 +18,11 @@ const Navbar = ({ activePage }) => {
           isScrolled ? "py-3" : "py-5"
         } flex justify-between items-center`}
       >
-        {/* Mobile button */}
+        {/* 🌿 Mobile Menu Button */}
         <div className="md:hidden">
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="text-blue-800 hover:text-teal-500"
+            className="text-emerald-800 hover:text-teal-500 transition"
           >
             <svg
               className="w-6 h-6"
@@ -40,11 +40,11 @@ const Navbar = ({ activePage }) => {
           </button>
         </div>
 
-        {/* Desktop links */}
+        {/* 💠 Desktop Navigation */}
         <div className="hidden md:flex justify-center flex-1">
           {!isScrolled ? (
-            /* ----- DEFAULT (visible now) ----- */
-            <div className="flex space-x-8 items-center bg-white/70 backdrop-blur-lg border border-blue-200/40 shadow-[0_0_20px_rgba(59,130,246,0.2)] px-10 py-4 rounded-full">
+            // 🕊️ Default Navbar (Before Scroll)
+            <div className="flex space-x-8 items-center bg-white/70 backdrop-blur-lg border border-emerald-200/40 shadow-[0_0_25px_rgba(16,185,129,0.25)] px-10 py-4 rounded-full transition-all duration-500">
               {[
                 { name: "Home", path: "/" },
                 { name: "SoulWhispers", path: "/soulwhispers" },
@@ -56,22 +56,23 @@ const Navbar = ({ activePage }) => {
                   to={link.path}
                   className={`relative text-sm font-semibold transition-all duration-300 ${
                     activePage === link.name.toLowerCase()
-                      ? "text-blue-600"
-                      : "text-blue-900 hover:text-teal-600"
+                      ? "text-emerald-600"
+                      : "text-emerald-900 hover:text-teal-600"
                   }`}
                 >
                   {link.name}
                   {activePage === link.name.toLowerCase() && (
-                    <span className="absolute left-0 -bottom-1 w-full h-[2px] bg-gradient-to-r from-blue-500 to-teal-400 rounded-full"></span>
+                    <span className="absolute left-0 -bottom-1 w-full h-[2px] bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full"></span>
                   )}
                 </Link>
               ))}
             </div>
           ) : (
-            /* ----- YOUR OLD SCROLLED DESIGN (unchanged) ----- */
+            // 🌈 Navbar after Scrolling (Your Original Style)
             <div className="relative">
               <div className="absolute -left-4 top-1/2 -translate-y-1/2 w-2 h-2 bg-white rounded-full shadow-lg z-10"></div>
-              <div className="bg-gradient-to-r from-blue-600 to-blue-400 rounded-full px-8 py-3 flex items-center space-x-6 shadow-lg">
+
+              <div className="bg-gradient-to-r from-emerald-600 to-teal-500 rounded-full px-8 py-3 flex items-center space-x-6 shadow-lg">
                 <Link
                   to="/"
                   className={`text-white hover:text-gray-200 font-medium ${
@@ -107,21 +108,22 @@ const Navbar = ({ activePage }) => {
                   Contact
                 </Link>
               </div>
+
               <div className="absolute -right-4 top-1/2 -translate-y-1/2 w-2 h-2 bg-white rounded-full shadow-lg z-10"></div>
             </div>
           )}
         </div>
 
-        {/* Mobile dropdown */}
+        {/* 📱 Mobile Dropdown Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden absolute top-full left-0 w-full bg-white/90 backdrop-blur-lg border-t border-blue-100 z-10">
+          <div className="md:hidden absolute top-full left-0 w-full bg-white/90 backdrop-blur-lg border-t border-emerald-100 z-10">
             <div className="px-4 py-4 space-y-4">
               {["Home", "SoulWhispers", "GymKey", "Contact"].map((name) => (
                 <Link
                   key={name}
                   to={`/${name === "Home" ? "" : name.toLowerCase()}`}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className={`block text-blue-900 hover:text-teal-600 transition ${
+                  className={`block text-emerald-900 hover:text-teal-600 transition ${
                     activePage === name.toLowerCase()
                       ? "text-teal-600 font-bold"
                       : ""
