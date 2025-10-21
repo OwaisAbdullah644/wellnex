@@ -10,17 +10,17 @@ const ContactDetails = () => {
   ];
 
   return (
-    <section className="relative py-24 bg-gradient-to-br from-[#f8ffff] via-[#eefcff] to-[#e6fdf6] overflow-hidden">
-      {/* Background animation */}
+    <section className="relative py-24 bg-gradient-to-br from-white via-gray-50 to-gray-100 overflow-hidden">
+      {/* Background glow */}
       <motion.div
         animate={{ x: [0, 40, 0], y: [0, -20, 0] }}
         transition={{ duration: 12, repeat: Infinity }}
-        className="absolute -top-32 -left-32 w-96 h-96 bg-gradient-to-tr from-teal-200/40 to-blue-200/30 rounded-full blur-[140px]"
+        className="absolute -top-32 -left-32 w-96 h-96 bg-gradient-to-tr from-gray-200/40 to-gray-400/30 rounded-full blur-[140px]"
       />
       <motion.div
         animate={{ x: [0, -40, 0], y: [0, 30, 0] }}
         transition={{ duration: 16, repeat: Infinity }}
-        className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-gradient-to-tr from-blue-300/30 to-cyan-200/20 rounded-full blur-[180px]"
+        className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-gradient-to-tr from-gray-300/30 to-gray-400/20 rounded-full blur-[180px]"
       />
 
       {/* Title */}
@@ -29,7 +29,7 @@ const ContactDetails = () => {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-5xl md:text-6xl font-extrabold bg-gradient-to-r from-blue-700 via-teal-600 to-cyan-500 bg-clip-text text-transparent"
+          className="text-5xl md:text-6xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-gray-800 to-gray-500"
         >
           Contact Details
         </motion.h2>
@@ -50,9 +50,9 @@ const ContactDetails = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
               whileHover={{ scale: 1.05, y: -5 }}
-              className="group bg-white/70 backdrop-blur-xl rounded-3xl border border-white/40 shadow-lg p-8 text-center hover:shadow-2xl transition-all"
+              className="group bg-white/80 backdrop-blur-xl rounded-3xl border border-gray-200 shadow-lg p-8 text-center hover:shadow-2xl transition-all"
             >
-              <div className="relative mx-auto mb-5 w-16 h-16 flex items-center justify-center rounded-2xl bg-gradient-to-tr from-blue-500 to-teal-400 shadow-md">
+              <div className="relative mx-auto mb-5 w-16 h-16 flex items-center justify-center rounded-2xl bg-gradient-to-tr from-gray-700 to-gray-500 shadow-md">
                 <detail.icon className="w-8 h-8 text-white" />
                 <motion.span
                   animate={{ scale: [1, 1.3, 1], opacity: [0.5, 0.2, 0.5] }}

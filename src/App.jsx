@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import SoulWhispers from './pages/SoulWhispers';
 import GymKey from './pages/GymKey';
 import Contact from './pages/Contact';
+import FloatingAssistant from './components/FloatingAssistant';
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
         <Route path="/gymkey" element={<GymKey />} />
         <Route path="/contact" element={<Contact />} />
       </Routes>
+      <FloatingAssistant />
     </Router>
   );
 };
