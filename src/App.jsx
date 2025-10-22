@@ -10,7 +10,6 @@ import Ribbons from './components/Ribbons';
 const App = () => {
   return (
     <Router>
-      {/* Ribbons covering full viewport */}
       <div style={{
         position: 'fixed',
         top:0,
@@ -22,8 +21,6 @@ const App = () => {
       }}>
         <Ribbons />
       </div>
-
-      {/* Website content above ribbons */}
       <div style={{ position:'relative', zIndex:1 }}>
         <Routes>
           <Route path="/" element={<Home />} />

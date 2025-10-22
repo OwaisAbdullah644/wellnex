@@ -1,116 +1,164 @@
-import React, { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import React, { useRef, useEffect } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Brain, Bot, Users, Rocket } from "lucide-react";
+import { useInView } from "react-intersection-observer";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const WhyWellnex = () => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: false });
+  const sectionRef = useRef(null);
+  const videoRefs = useRef([]);
+  const { ref: inViewRef, inView } = useInView({ threshold: 0.1, triggerOnce: false });
+
+  const ref = (node) => {
+    sectionRef.current = node;
+    inViewRef(node);
+  };
 
   const whyPoints = [
     {
       title: "Integrated Wellness",
-      desc: "Physical, mental, and emotional health in one ecosystem.",
-      icon: <Brain className="w-12 h-12 text-yellow-400" />,
-      image: "https://images.pexels.com/photos/247356/pexels-photo-247356.jpeg?auto=compress&cs=tinysrgb&w=400",
+      desc: "Physical, mental, and emotional harmony in one.",
+      icon: <Brain className="w-12 h-12 text-[#FDC700]" />,
+      media: "mindful.mp4",
     },
     {
       title: "AI-Driven Personalization",
-      desc: "Smart recommendations tailored to your goals.",
-      icon: <Bot className="w-12 h-12 text-yellow-400" />,
-      image: "https://images.pexels.com/photos/1596445/pexels-photo-1596445.jpeg?auto=compress&cs=tinysrgb&w=400",
+      desc: "Tailored insights for your wellness journey.",
+      icon: <Bot className="w-12 h-12 text-[#FDC700]" />,
+      media: "balanced.mp4",
     },
     {
       title: "Scalable for Providers",
-      desc: "From boutique studios to national gym chains.",
-      icon: <Users className="w-12 h-12 text-yellow-400" />,
-      image: "https://images.pexels.com/photos/2294363/pexels-photo-2294363.jpeg?auto=compress&cs=tinysrgb&w=400",
+      desc: "Fits all from small studios to large chains.",
+      icon: <Users className="w-12 h-12 text-[#FDC700]" />,
+      media: "community.mp4",
     },
     {
       title: "Built for the Future",
-      desc: "Cloud-native, mobile-first, and privacy-conscious.",
-      icon: <Rocket className="w-12 h-12 text-yellow-400" />,
-      image: "https://images.pexels.com/photos/4325478/pexels-photo-4325478.jpeg?auto=compress&cs=tinysrgb&w=400",
+      desc: "Cutting-edge, secure, and mobile-ready.",
+      icon: <Rocket className="w-12 h-12 text-[#FDC700]" />,
+      media: "future.mp4",
     },
   ];
 
-  const cardVariants = {
-    hidden: { opacity: 0, scale: 0.9 },
-    visible: (i) => ({
-      opacity: 1,
-      scale: 1,
-      transition: {
-        duration: 0.6,
-        delay: i * 0.15,
-        ease: "easeOut",
-      },
-    }),
-  };
+  useEffect(() => {
+    if (inView) {
+      videoRefs.current.forEach((video) => {
+        if (video) video.play();
+      });
+    } else {
+      videoRefs.current.forEach((video) => {
+        if (video) video.pause();
+      });
+    }
+  }, [inView]);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.from(".hero-title", {
+        opacity: 0,
+        scale: 0.9,
+        duration: 1,
+        ease: "power3.out",
+        scrollTrigger: { trigger: sectionRef.current, start: "top 80%" },
+      });
+      gsap.from(".hero-desc", {
+        opacity: 0,
+        y: 30,
+        duration: 0.8,
+        ease: "power2.out",
+        scrollTrigger: { trigger: sectionRef.current, start: "top 80%" },
+      });
+      gsap.to(".bg-parallax", {
+        yPercent: -20,
+        ease: "none",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: 1,
+        },
+      });
+      const cards = gsap.utils.toArray(".point-card");
+      cards.forEach((card, i) => {
+        gsap.from(card, {
+          opacity: 0,
+          x: 200,
+          duration: 1,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: ".points-container",
+            start: "top 70%",
+          },
+        });
+      });
+      cards.forEach((card) => {
+        card.addEventListener("mouseenter", () =>
+          gsap.to(card, { scale: 1.05, duration: 0.3 })
+        );
+        card.addEventListener("mouseleave", () =>
+          gsap.to(card, { scale: 1, duration: 0.3 })
+        );
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, [inView]);
 
   return (
     <section
       ref={ref}
-      className="relative min-h-screen bg-gradient-to-b from-gray-900 via-black to-gray-900 text-white overflow-hidden px-8 py-20"
+      className="relative min-h-screen bg-black text-white overflow-hidden px-6 py-20"
+      style={{ perspective: "1000px", willChange: "transform" }}
     >
-      {/* Background image - Dark gym with weights */}
       <div
-        className="absolute inset-0"
-        style={{
-          backgroundImage: `url('https://images.pexels.com/photos/247356/pexels-photo-247356.jpeg')`, // Dark gym weights
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          opacity: 0.4,
-          zIndex: 0,
-        }}
+        className="bg-parallax absolute inset-0 bg-cover bg-center opacity-40"
+        style={{ backgroundImage: `url('yoga.jpg')` }}
       />
-
-      {/* Header Section */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={isInView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.8 }}
-        className="text-center mb-16 z-10 relative"
-      >
-        <h1 className="text-5xl lg:text-6xl font-black text-yellow-400 mb-4 uppercase tracking-wide">
-          Why Wellnex?
+      <div className="absolute inset-0 bg-gradient-to-b from-black/80 to-black/50 z-0" />
+      <div className="relative z-10 text-center mb-16 max-w-2xl mx-auto">
+        <h1 className="hero-title text-5xl lg:text-6xl font-extrabold text-[#FDC700] uppercase tracking-wider">
+          Why Choose Wellnex?
         </h1>
-        <p className="text-gray-300 text-xl max-w-3xl mx-auto leading-relaxed">
-          Discover the pillars that make Wellnex the future of integrated wellness.
+        <p className="hero-desc text-gray-300 text-xl mt-4 leading-relaxed">
+          Explore the core strengths driving Wellnex’s wellness revolution.
         </p>
-      </motion.div>
-
-      {/* Masonry Grid */}
-      <motion.div
-        className="columns-2 lg:columns-4 gap-6 space-y-6"
-        initial={{ opacity: 0 }}
-        animate={isInView ? { opacity: 1 } : {}}
-        transition={{ duration: 0.8, staggerChildren: 0.1 }}
-      >
+      </div>
+      <div className="points-container relative z-10 flex justify-center items-center h-[60vh]">
         {whyPoints.map((point, i) => (
-          <motion.div
+          <div
             key={i}
-            variants={cardVariants}
-            custom={i}
-            className="break-inside-avoid bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-yellow-500/20 transition-shadow duration-300 border border-yellow-500/20"
+            className="point-card absolute bg-black/70 backdrop-blur-sm rounded-xl p-6 border border-[#FDC700]/20 shadow-lg"
+            style={{
+              transform: `rotate(${i * 90}deg) translateY(250px) rotate(${-i * 90}deg)`,
+              width: "300px",
+            }}
           >
-            <img
-              src={point.image}
-              alt={point.title}
-              className="w-full h-48 object-cover"
-            />
-            <div className="p-6">
-              <div className="mb-3">
-                {point.icon}
-              </div>
-              <h3 className="text-xl font-bold text-yellow-400 mb-2 uppercase tracking-wide">
+            <div className="flex items-center mb-4">
+              {point.icon}
+              <h3 className="text-xl font-bold text-[#FDC700] ml-3 uppercase tracking-wide">
                 {point.title}
               </h3>
-              <p className="text-gray-300 text-sm leading-relaxed">
-                {point.desc}
-              </p>
             </div>
-          </motion.div>
+            <p className="text-gray-400 text-sm leading-relaxed mb-6">
+              {point.desc}
+            </p>
+            <div className="relative w-full h-32 overflow-hidden rounded-lg">
+              <video
+                ref={(el) => (videoRefs.current[i] = el)}
+                loop
+                muted
+                className="absolute inset-0 w-full h-full object-cover"
+                src={point.media}
+              >
+                <source src={point.media} type="video/mp4" />
+              </video>
+            </div>
+          </div>
         ))}
-      </motion.div>
+      </div>
     </section>
   );
 };

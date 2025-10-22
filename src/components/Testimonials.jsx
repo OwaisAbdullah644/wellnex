@@ -1,10 +1,14 @@
-// Testimonials_CinematicParallax.jsx
-import React, { useRef } from "react";
-import { motion, useMotionValue, useTransform, useAnimation } from "framer-motion";
+import React, { useRef, useEffect } from "react";
+import { motion } from "framer-motion";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-const GOLD = "#FDC700";
+gsap.registerPlugin(ScrollTrigger);
 
-const Testimonials_CinematicParallax = () => {
+const Testimonials = () => {
+  const sectionRef = useRef(null);
+  const GOLD = "#FDC700";
+
   const testimonials = [
     {
       quote: "“SoulWhispers helped me reconnect with myself — balance, energy, clarity.”",
@@ -32,38 +36,40 @@ const Testimonials_CinematicParallax = () => {
     },
   ];
 
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const rotateX = useTransform(y, [-200, 200], [15, -15]);
-  const rotateY = useTransform(x, [-200, 200], [-15, 15]);
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.to(".bg-video-parallax", {
+        yPercent: -15,
+        ease: "none",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: 1,
+        },
+      });
+    }, sectionRef);
 
-  const handleMouseMove = (e) => {
-    const { innerWidth, innerHeight } = window;
-    const xPos = e.clientX - innerWidth / 2;
-    const yPos = e.clientY - innerHeight / 2;
-    x.set(xPos / 10);
-    y.set(yPos / 10);
-  };
+    return () => ctx.revert();
+  }, []);
 
   return (
     <section
-      onMouseMove={handleMouseMove}
+      ref={sectionRef}
       className="relative overflow-hidden py-32 bg-black text-white perspective-1000"
+      style={{ willChange: "transform" }}
     >
-      {/* Background video or holographic overlay */}
       <div className="absolute inset-0 overflow-hidden">
         <video
           autoPlay
           loop
           muted
           playsInline
-          className="absolute w-full h-full object-cover opacity-20"
+          className="bg-video-parallax absolute w-full h-full object-cover opacity-20"
           src="https://cdn.pixabay.com/video/2023/01/12/144499-793634482_tiny.mp4"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/80" />
       </div>
-
-      {/* Floating gold particles */}
       {[...Array(12)].map((_, i) => (
         <motion.div
           key={i}
@@ -73,13 +79,11 @@ const Testimonials_CinematicParallax = () => {
           transition={{ duration: 8 + Math.random() * 5, repeat: Infinity, delay: i * 0.5 }}
         />
       ))}
-
-      {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 1 }}
+        transition={{ duration: 0.8 }}
         className="text-center relative z-10 mb-20"
       >
         <h2 className="text-6xl font-extrabold text-[#FDC700] tracking-tight">
@@ -89,12 +93,7 @@ const Testimonials_CinematicParallax = () => {
           Reflections of balance, strength, and transformation — powered by Wellnex.
         </p>
       </motion.div>
-
-      {/* Parallax cards */}
-      <motion.div
-        style={{ rotateX, rotateY }}
-        className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-10 max-w-6xl mx-auto px-8"
-      >
+      <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-10 max-w-6xl mx-auto px-8">
         {testimonials.map((t, i) => (
           <motion.div
             key={i}
@@ -105,7 +104,7 @@ const Testimonials_CinematicParallax = () => {
               boxShadow: `0 0 40px ${GOLD}40`,
               borderColor: `${GOLD}`,
             }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.5 }}
             className="relative p-10 bg-zinc-900/40 border border-zinc-800 rounded-3xl backdrop-blur-lg shadow-lg hover:shadow-[#FDC700]/20"
           >
             <motion.div
@@ -129,9 +128,9 @@ const Testimonials_CinematicParallax = () => {
             </div>
           </motion.div>
         ))}
-      </motion.div>
+      </div>
     </section>
   );
 };
 
-export default Testimonials_CinematicParallax;
+export default Testimonials;
