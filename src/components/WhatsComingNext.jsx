@@ -1,19 +1,11 @@
 import React, { useRef, useEffect, useState } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useInView } from "react-intersection-observer";
-
-gsap.registerPlugin(ScrollTrigger);
+import { motion, useInView } from "framer-motion";
 
 const WhatsComingNext = () => {
   const sectionRef = useRef(null);
   const [timeLeft, setTimeLeft] = useState({ days: 45, hours: 12, minutes: 30, seconds: 0 });
-  const { ref: inViewRef, inView } = useInView({ threshold: 0.2, triggerOnce: false });
-
-  const ref = (node) => {
-    sectionRef.current = node;
-    inViewRef(node);
-  };
+  const isInView = useInView(sectionRef, { threshold: 0.2, once: false });
+  const videoRefs = useRef([]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -30,68 +22,16 @@ const WhatsComingNext = () => {
   }, []);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from(".hero-title", {
-        opacity: 0,
-        y: 60,
-        duration: 1.2,
-        ease: "power3.out",
-        scrollTrigger: { trigger: sectionRef.current, start: "top 80%" },
+    if (isInView) {
+      videoRefs.current.forEach((video) => {
+        if (video) video.play();
       });
-      gsap.from(".hero-desc", {
-        opacity: 0,
-        y: 40,
-        duration: 1,
-        ease: "power2.out",
-        scrollTrigger: { trigger: sectionRef.current, start: "top 80%" },
+    } else {
+      videoRefs.current.forEach((video) => {
+        if (video) video.pause();
       });
-      gsap.from(".feature-card", {
-        opacity: 0,
-        y: 80,
-        stagger: 0.2,
-        duration: 1,
-        ease: "power2.out",
-        scrollTrigger: { trigger: ".feature-grid", start: "top 75%" },
-      });
-      gsap.from(".cta-button", {
-        opacity: 0,
-        y: 50,
-        duration: 1,
-        ease: "power3.out",
-        scrollTrigger: { trigger: ".cta-section", start: "top 80%" },
-      });
-      gsap.to(".bg-parallax-coming", {
-        yPercent: -20,
-        ease: "none",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top top",
-          end: "bottom top",
-          scrub: 1,
-        },
-      });
-      const cards = document.querySelectorAll(".feature-card");
-      cards.forEach((card) => {
-        const hoverTl = gsap.to(card, {
-          scale: 1.03,
-          duration: 0.3,
-          paused: true,
-        });
-        card.addEventListener("mouseenter", () => hoverTl.play());
-        card.addEventListener("mouseleave", () => hoverTl.reverse());
-      });
-      const btn = document.querySelector(".cta-button");
-      const ctaHover = gsap.to(btn, {
-        scale: 1.05,
-        duration: 0.3,
-        paused: true,
-      });
-      btn?.addEventListener("mouseenter", () => ctaHover.play());
-      btn?.addEventListener("mouseleave", () => ctaHover.reverse());
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, [inView]);
+    }
+  }, [isInView]);
 
   const features = [
     {
@@ -111,42 +51,82 @@ const WhatsComingNext = () => {
     },
   ];
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.3,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+  };
+
   return (
     <section
-      ref={ref}
+      ref={sectionRef}
       className="relative min-h-screen bg-black text-white overflow-hidden px-6 py-16"
-      style={{ willChange: "transform" }}
     >
-      <div 
-        className="bg-parallax-coming absolute inset-0"
-        style={{
-          backgroundImage: `url('yoga.jpg')`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          zIndex: -1,
+      <div
+        className="absolute inset-0 bg-cover bg-center opacity-40"
+        style={{ 
+          backgroundImage: `url('yoga.jpg')`, 
+          backgroundAttachment: "fixed" 
         }}
       />
       <div className="absolute inset-0 bg-black/70 z-0" />
-      <div className="relative z-10 text-center max-w-4xl mx-auto mb-16">
-        <h1 className="hero-title text-5xl lg:text-6xl font-bold text-[#FDC700] uppercase tracking-wide leading-tight">
-          What’s Next in Wellness
-        </h1>
-        <p className="hero-desc text-gray-300 text-lg lg:text-xl mt-4 leading-relaxed">
+      
+      <motion.div 
+        className="relative z-10 text-center max-w-4xl mx-auto mb-16"
+        initial={{ opacity: 0, y: 60 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true }}
+      >
+        <motion.h1 
+          className="text-5xl lg:text-6xl font-bold text-[#FDC700] uppercase tracking-wide leading-tight"
+          initial={{ scale: 0.9 }}
+          whileInView={{ scale: 1 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
+          What's Next in Wellness
+        </motion.h1>
+        <motion.p 
+          className="text-gray-300 text-lg lg:text-xl mt-4 leading-relaxed"
+          initial={{ y: 30 }}
+          whileInView={{ y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
           Elevate your journey with Wellnex—where mindfulness meets modern technology.
-        </p>
-      </div>
-      <div className="feature-grid max-w-3xl mx-auto grid grid-cols-1 gap-8 z-10 mb-16">
+        </motion.p>
+      </motion.div>
+
+      <motion.div 
+        className="feature-grid max-w-3xl mx-auto grid grid-cols-1 gap-8 z-10 mb-16"
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+      >
         {features.map((feature, i) => (
-          <div
+          <motion.div
             key={i}
             className="feature-card bg-black/80 rounded-xl p-6 text-center border border-[#FDC700]/20 overflow-hidden"
+            variants={itemVariants}
+            whileHover={{ scale: 1.03 }}
           >
             <div className="relative w-full h-48 bg-gray-800 rounded-lg overflow-hidden mb-4">
               <video
-                autoPlay
+                ref={(el) => (videoRefs.current[i] = el)}
                 loop
                 muted
-                playsInline
                 className="absolute inset-0 w-full h-full object-cover"
                 src={feature.media}
               >
@@ -160,14 +140,24 @@ const WhatsComingNext = () => {
             <p className="text-gray-400 mt-2 text-sm leading-relaxed">
               {feature.desc}
             </p>
-          </div>
+          </motion.div>
         ))}
-      </div>
-      <div className="cta-section text-center z-10">
-        <button className="cta-button px-10 py-3 bg-[#FDC700] text-black rounded-lg font-medium text-lg uppercase tracking-wide shadow-md">
+      </motion.div>
+
+      <motion.div 
+        className="cta-section text-center z-10"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true }}
+      >
+        <motion.button 
+          className="px-10 py-3 bg-[#FDC700] text-black rounded-lg font-medium text-lg uppercase tracking-wide shadow-md"
+          whileHover={{ scale: 1.05 }}
+        >
           Join the Journey
-        </button>
-      </div>
+        </motion.button>
+      </motion.div>
     </section>
   );
 };
