@@ -1,145 +1,155 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { Calendar, Cpu, Activity, HeartPulse } from "lucide-react";
-import { Link } from "react-router-dom";
+import React, { useRef, useState, useEffect } from "react";
+import { motion, useInView } from "framer-motion";
 
 const WhatsComingNext = () => {
-  const textVariant = {
-    hidden: { opacity: 0, y: 50 },
-    visible: { opacity: 1, y: 0, transition: { duration: 1.2, ease: "easeOut" } },
-  };
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: false });
+  const [timeLeft, setTimeLeft] = useState({ days: 45, hours: 12, minutes: 30, seconds: 0 });
 
-  const featureCards = [
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => {
+        let { days, hours, minutes, seconds } = prev;
+        if (seconds > 0) {
+          seconds--;
+        } else if (minutes > 0) {
+          minutes--;
+          seconds = 59;
+        } else if (hours > 0) {
+          hours--;
+          minutes = 59;
+          seconds = 59;
+        } else if (days > 0) {
+          days--;
+          hours = 23;
+          minutes = 59;
+          seconds = 59;
+        }
+        return { days, hours, minutes, seconds };
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const features = [
     {
-      icon: <HeartPulse className="w-7 h-7 text-cyan-400" />,
-      title: "Unified Vital Intelligence",
-      desc: "All your wellness metrics — heart rate, sleep, activity — visualized through real-time AI dashboards.",
-      gradient: "from-blue-600 to-cyan-400",
+      title: "Wearable Integration",
+      desc: "Sync your devices for real-time health tracking.",
+      icon: "⌚",
     },
     {
-      icon: <Cpu className="w-7 h-7 text-indigo-400" />,
-      title: "Cognitive Wellness AI",
-      desc: "An adaptive assistant that understands emotional, mental, and physical states to offer personalized insights.",
-      gradient: "from-indigo-500 to-purple-400",
+      title: "Nutrition & Meal Planning",
+      desc: "AI-curated plans for optimal fueling.",
+      icon: "🍎",
     },
     {
-      icon: <Activity className="w-7 h-7 text-emerald-400" />,
-      title: "Smart Connected Ecosystem",
-      desc: "Wearables, nutrition trackers, and clinics — all connected through the Wellnex Neural Network.",
-      gradient: "from-emerald-500 to-teal-400",
+      title: "Corporate Wellness Dashboards",
+      desc: "Tools for teams to thrive together.",
+      icon: "👥",
     },
   ];
 
+  const cardVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: (i) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        delay: i * 0.3,
+        ease: "easeOut",
+      },
+    }),
+  };
+
   return (
-    <section className="relative overflow-hidden py-32 bg-[#020617] text-white flex flex-col items-center justify-center">
-      {/* 🌌 Animated Nebula Background */}
-      <motion.div
-        className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,#0f172a_0%,#020617_80%)]"
-        animate={{
-          backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+    <section
+      ref={ref}
+      className="relative min-h-screen bg-gradient-to-b from-gray-900 via-black to-gray-900 text-white overflow-hidden px-8 py-20"
+    >
+      {/* Background gym texture */}
+      <div
+        className="absolute inset-0"
+        style={{
+          // Same code as above, but change the backgroundImage URL in the section to:
+backgroundImage: `url('https://images.pexels.com/photos/4325478/pexels-photo-4325478.jpeg')`, // Yoga studio
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          opacity: 0.4,
+          zIndex: 0,
         }}
-        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-        style={{ backgroundSize: "200% 200%" }}
       />
 
-      {/* 💫 Floating light particles */}
-      {Array.from({ length: 20 }).map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute w-[3px] h-[3px] bg-cyan-300 rounded-full opacity-50"
-          initial={{
-            x: Math.random() * window.innerWidth,
-            y: Math.random() * window.innerHeight,
-            scale: 0,
-          }}
-          animate={{
-            y: [Math.random() * window.innerHeight, -50],
-            opacity: [0, 1, 0],
-            scale: [0.5, 1, 0.5],
-          }}
-          transition={{
-            duration: 10 + Math.random() * 10,
-            repeat: Infinity,
-            delay: Math.random() * 5,
-          }}
-        />
-      ))}
-
-      {/* 🔮 Section Title */}
+      {/* Header */}
       <motion.div
-        variants={textVariant}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        className="relative z-10 text-center px-6"
+        initial={{ opacity: 0, y: 30 }}
+        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.8 }}
+        className="text-center mb-16 z-10 relative"
       >
-        <h2 className="text-6xl md:text-7xl font-extrabold mb-6 bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500 bg-clip-text text-transparent drop-shadow-[0_0_25px_rgba(59,130,246,0.4)]">
-          The Future of Wellness
-        </h2>
-        <p className="text-slate-300 max-w-2xl mx-auto text-lg md:text-xl leading-relaxed">
-          We’re building the next-gen <span className="text-cyan-400 font-semibold">Wellnex Platform</span> —  
-          where health meets intelligence, and your body data evolves into a living, breathing ecosystem.
+        <h1 className="text-5xl lg:text-6xl font-black text-yellow-400 mb-4 uppercase tracking-wide">
+          What's Coming Next
+        </h1>
+        <p className="text-gray-300 text-xl max-w-3xl mx-auto leading-relaxed">
+          We're building a unified Wellnex Platform that brings together fitness, nutrition, mental health, and diagnostics into a single intelligent dashboard.
         </p>
       </motion.div>
 
-      {/* ⚙️ Feature Cards */}
-      <div className="relative z-10 mt-20 grid md:grid-cols-3 gap-10 max-w-6xl px-8">
-        {featureCards.map((card, i) => (
+      {/* Feature Cards with Countdown */}
+      <motion.div
+        className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto z-10 relative"
+        initial={{ opacity: 0 }}
+        animate={isInView ? { opacity: 1 } : {}}
+        transition={{ duration: 0.8, staggerChildren: 0.2 }}
+      >
+        {features.map((feature, i) => (
           <motion.div
             key={i}
-            initial={{ opacity: 0, y: 60 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: i * 0.3 }}
-            viewport={{ once: true }}
-            whileHover={{
-              scale: 1.05,
-              boxShadow: "0 0 30px rgba(59,130,246,0.3)",
-            }}
-            className={`group relative p-8 rounded-3xl bg-gradient-to-b from-slate-900/70 to-slate-800/50 border border-slate-700 backdrop-blur-xl overflow-hidden`}
+            variants={cardVariants}
+            custom={i}
+            className="bg-gray-800 rounded-xl p-6 text-center group hover:bg-yellow-900/20 transition-colors duration-300 border border-yellow-500/20"
           >
-            {/* Glow Background */}
-            <motion.div
-              className={`absolute inset-0 bg-gradient-to-r ${card.gradient} opacity-10 group-hover:opacity-20 transition-all duration-700`}
-            />
-            {/* Icon */}
-            <div className="mb-5">{card.icon}</div>
-            <h3 className="text-2xl font-semibold mb-3">{card.title}</h3>
-            <p className="text-slate-400 text-sm leading-relaxed">{card.desc}</p>
+            <div className="text-5xl mb-4">{feature.icon}</div>
+            <h3 className="text-2xl font-bold text-yellow-400 mb-3 uppercase tracking-wide">
+              {feature.title}
+            </h3>
+            <p className="text-gray-300 mb-4 leading-relaxed">
+              {feature.desc}
+            </p>
+            {/* Countdown Timer */}
+            <div className="space-y-2">
+              <div className="flex justify-between text-sm text-gray-400">
+                <span>Days</span>
+                <span>Hours</span>
+                <span>Min</span>
+                <span>Sec</span>
+              </div>
+              <div className="flex justify-between text-lg font-bold text-yellow-400">
+                <span>{timeLeft.days}</span>
+                <span>{timeLeft.hours}</span>
+                <span>{timeLeft.minutes}</span>
+                <span>{timeLeft.seconds}</span>
+              </div>
+            </div>
           </motion.div>
         ))}
-      </div>
-
-      {/* 🌠 CTA */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1, delay: 0.8 }}
-        viewport={{ once: true }}
-        className="relative z-10 mt-16"
-      >
-        <Link
-          to="/contact"
-          className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 text-white px-10 py-4 rounded-full font-semibold shadow-lg hover:shadow-cyan-500/40 transition-all duration-500"
-        >
-          Get Early Access
-          <motion.span
-            animate={{ x: [0, 6, 0] }}
-            transition={{ duration: 1.2, repeat: Infinity }}
-          >
-            →
-          </motion.span>
-        </Link>
       </motion.div>
 
-      {/* ⚡ Animated bottom pulse line */}
+      {/* CTA */}
       <motion.div
-        className="absolute bottom-0 left-0 w-full h-[3px] bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500"
-        initial={{ scaleX: 0 }}
-        whileInView={{ scaleX: 1 }}
-        transition={{ duration: 2, ease: "easeInOut" }}
-        viewport={{ once: true }}
-        style={{ originX: 0 }}
-      />
+        initial={{ opacity: 0, y: 30 }}
+        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.8, delay: 0.8 }}
+        className="text-center mt-16 z-10 relative"
+      >
+        <motion.button
+          whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(255, 215, 0, 0.5)" }}
+          whileTap={{ scale: 0.95 }}
+          className="px-12 py-4 bg-yellow-400 text-black rounded-full font-bold text-xl uppercase tracking-wide shadow-lg transition-all duration-300"
+        >
+          Get Early Access
+        </motion.button>
+      </motion.div>
     </section>
   );
 };

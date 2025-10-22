@@ -1,83 +1,137 @@
-import React from "react";
-import { motion } from "framer-motion";
+// Testimonials_CinematicParallax.jsx
+import React, { useRef } from "react";
+import { motion, useMotionValue, useTransform, useAnimation } from "framer-motion";
 
-const Testimonials = () => {
+const GOLD = "#FDC700";
+
+const Testimonials_CinematicParallax = () => {
   const testimonials = [
     {
-      quote: "“SoulWhispers helped me find calm in chaos. It’s like therapy in my pocket.”",
+      quote: "“SoulWhispers helped me reconnect with myself — balance, energy, clarity.”",
       author: "Ayesha R.",
       role: "Karachi",
-      image:
-        "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=60",
+      image: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=60",
     },
     {
-      quote: "“GymKey has transformed how I manage my gym. My members love the convenience.”",
+      quote: "“GymKey is revolutionizing fitness — my clients stay engaged like never before.”",
       author: "Imran M.",
       role: "Gym Owner, Lahore",
-      image:
-        "https://images.unsplash.com/photo-1603415526960-f7e0328c63b1?auto=format&fit=crop&w=200&q=60",
+      image: "https://images.unsplash.com/photo-1603415526960-f7e0328c63b1?auto=format&fit=crop&w=200&q=60",
+    },
+    {
+      quote: "“Wellnex guided my recovery — it’s not just tech, it’s evolution.”",
+      author: "Sana T.",
+      role: "Dubai",
+      image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=200&q=60",
+    },
+    {
+      quote: "“This is the future of fitness and mind-body synergy.”",
+      author: "Ahmed K.",
+      role: "Islamabad",
+      image: "https://images.unsplash.com/photo-1552058544-f2b08422138a?auto=format&fit=crop&w=200&q=60",
     },
   ];
 
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 50 },
-    visible: { opacity: 1, y: 0, transition: { duration: 1, ease: "easeOut" } },
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const rotateX = useTransform(y, [-200, 200], [15, -15]);
+  const rotateY = useTransform(x, [-200, 200], [-15, 15]);
+
+  const handleMouseMove = (e) => {
+    const { innerWidth, innerHeight } = window;
+    const xPos = e.clientX - innerWidth / 2;
+    const yPos = e.clientY - innerHeight / 2;
+    x.set(xPos / 10);
+    y.set(yPos / 10);
   };
 
   return (
-    <section className="relative overflow-hidden py-32 bg-gradient-to-b from-white to-gray-100 text-gray-800">
+    <section
+      onMouseMove={handleMouseMove}
+      className="relative overflow-hidden py-32 bg-black text-white perspective-1000"
+    >
+      {/* Background video or holographic overlay */}
+      <div className="absolute inset-0 overflow-hidden">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute w-full h-full object-cover opacity-20"
+          src="https://cdn.pixabay.com/video/2023/01/12/144499-793634482_tiny.mp4"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/80" />
+      </div>
+
+      {/* Floating gold particles */}
+      {[...Array(12)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute w-2 h-2 bg-[#FDC700]/40 rounded-full blur-[2px]"
+          style={{ left: `${Math.random() * 100}%`, top: `${Math.random() * 100}%` }}
+          animate={{ y: ["0%", "-30%"], opacity: [0.2, 0.8, 0.2] }}
+          transition={{ duration: 8 + Math.random() * 5, repeat: Infinity, delay: i * 0.5 }}
+        />
+      ))}
+
       {/* Header */}
       <motion.div
-        variants={fadeInUp}
-        initial="hidden"
-        whileInView="visible"
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="relative z-10 text-center mb-16"
+        transition={{ duration: 1 }}
+        className="text-center relative z-10 mb-20"
       >
-        <h2 className="text-5xl md:text-6xl font-extrabold bg-gradient-to-r from-gray-700 to-gray-500 bg-clip-text text-transparent">
+        <h2 className="text-6xl font-extrabold text-[#FDC700] tracking-tight">
           Voices of Wellnex
         </h2>
-        <p className="text-gray-600 mt-4 text-lg max-w-2xl mx-auto leading-relaxed">
-          Real experiences from people transforming their health and lives with Wellnex.
+        <p className="text-gray-400 mt-4 text-lg max-w-2xl mx-auto leading-relaxed">
+          Reflections of balance, strength, and transformation — powered by Wellnex.
         </p>
       </motion.div>
 
-      {/* Testimonials Grid */}
-      <div className="relative z-10 max-w-5xl mx-auto grid md:grid-cols-2 gap-10 px-8">
+      {/* Parallax cards */}
+      <motion.div
+        style={{ rotateX, rotateY }}
+        className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-10 max-w-6xl mx-auto px-8"
+      >
         {testimonials.map((t, i) => (
           <motion.div
             key={i}
-            variants={fadeInUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.3 }}
-            whileHover={{ scale: 1.03 }}
-            className="relative bg-white border border-gray-200 rounded-3xl shadow-lg hover:shadow-gray-400/30 p-10 transition-all duration-500"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            whileHover={{
+              scale: 1.05,
+              boxShadow: `0 0 40px ${GOLD}40`,
+              borderColor: `${GOLD}`,
+            }}
+            transition={{ duration: 0.6 }}
+            className="relative p-10 bg-zinc-900/40 border border-zinc-800 rounded-3xl backdrop-blur-lg shadow-lg hover:shadow-[#FDC700]/20"
           >
-            <motion.p className="text-xl italic text-gray-700 mb-8 relative z-10 leading-relaxed">
+            <motion.div
+              className="absolute inset-0 rounded-3xl border border-[#FDC700]/30"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+            />
+            <p className="text-lg italic text-gray-200 mb-8 z-10 relative leading-relaxed">
               {t.quote}
-            </motion.p>
-
-            <div className="flex items-center relative z-10">
-              <motion.img
+            </p>
+            <div className="flex items-center">
+              <img
                 src={t.image}
                 alt={t.author}
-                className="w-14 h-14 rounded-full mr-4 object-cover shadow-md border border-gray-300"
+                className="w-14 h-14 rounded-full mr-4 border border-[#FDC700]/60 shadow-[0_0_15px_rgba(253,199,0,0.4)] object-cover"
               />
               <div>
-                <h4 className="text-lg font-semibold text-gray-800">{t.author}</h4>
-                <p className="text-sm text-gray-500">{t.role}</p>
+                <h4 className="text-lg font-semibold text-[#FDC700]">{t.author}</h4>
+                <p className="text-sm text-gray-400">{t.role}</p>
               </div>
             </div>
           </motion.div>
         ))}
-      </div>
-
-      {/* Divider */}
-      <motion.div className="absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-gray-400 to-gray-200" />
+      </motion.div>
     </section>
   );
 };
 
-export default Testimonials;
+export default Testimonials_CinematicParallax;

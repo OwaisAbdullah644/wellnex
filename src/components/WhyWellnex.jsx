@@ -1,121 +1,116 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { Users, Brain, Shield, Cloud } from "lucide-react";
+import React, { useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import { Brain, Bot, Users, Rocket } from "lucide-react";
 
 const WhyWellnex = () => {
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 40 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
-  };
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: false });
 
-  const pillars = [
+  const whyPoints = [
     {
-      icon: Users,
       title: "Integrated Wellness",
-      desc: "Physical, mental, and emotional health united in one ecosystem.",
+      desc: "Physical, mental, and emotional health in one ecosystem.",
+      icon: <Brain className="w-12 h-12 text-yellow-400" />,
+      image: "https://images.pexels.com/photos/247356/pexels-photo-247356.jpeg?auto=compress&cs=tinysrgb&w=400",
     },
     {
-      icon: Brain,
       title: "AI-Driven Personalization",
-      desc: "Smart, adaptive insights tailored precisely to you.",
+      desc: "Smart recommendations tailored to your goals.",
+      icon: <Bot className="w-12 h-12 text-yellow-400" />,
+      image: "https://images.pexels.com/photos/1596445/pexels-photo-1596445.jpeg?auto=compress&cs=tinysrgb&w=400",
     },
     {
-      icon: Shield,
       title: "Scalable for Providers",
-      desc: "From boutique studios to national wellness platforms.",
+      desc: "From boutique studios to national gym chains.",
+      icon: <Users className="w-12 h-12 text-yellow-400" />,
+      image: "https://images.pexels.com/photos/2294363/pexels-photo-2294363.jpeg?auto=compress&cs=tinysrgb&w=400",
     },
     {
-      icon: Cloud,
       title: "Built for the Future",
-      desc: "Cloud-native, privacy-first, and built to scale globally.",
+      desc: "Cloud-native, mobile-first, and privacy-conscious.",
+      icon: <Rocket className="w-12 h-12 text-yellow-400" />,
+      image: "https://images.pexels.com/photos/4325478/pexels-photo-4325478.jpeg?auto=compress&cs=tinysrgb&w=400",
     },
   ];
 
-  const particles = [...Array(6)].map((_, i) => (
-    <motion.span
-      key={i}
-      className="absolute w-2 h-2 bg-gray-400/20 rounded-full blur-[1px]"
-      style={{
-        top: `${Math.random() * 100}%`,
-        left: `${Math.random() * 100}%`,
-      }}
-      animate={{
-        y: [0, -15, 0],
-      }}
-      transition={{
-        duration: 5 + Math.random() * 3,
-        repeat: Infinity,
-        ease: "easeInOut",
-      }}
-    />
-  ));
+  const cardVariants = {
+    hidden: { opacity: 0, scale: 0.9 },
+    visible: (i) => ({
+      opacity: 1,
+      scale: 1,
+      transition: {
+        duration: 0.6,
+        delay: i * 0.15,
+        ease: "easeOut",
+      },
+    }),
+  };
 
   return (
-    <section className="relative overflow-hidden py-28 bg-gradient-to-b from-white to-gray-100 text-gray-800">
-      <motion.div
-        className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(209,213,219,0.3)_0%,rgba(255,255,255,0)_80%)]"
-        animate={{ opacity: [0.3, 0.5, 0.3] }}
-        transition={{ duration: 8, repeat: Infinity }}
+    <section
+      ref={ref}
+      className="relative min-h-screen bg-gradient-to-b from-gray-900 via-black to-gray-900 text-white overflow-hidden px-8 py-20"
+    >
+      {/* Background image - Dark gym with weights */}
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: `url('https://images.pexels.com/photos/247356/pexels-photo-247356.jpeg')`, // Dark gym weights
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          opacity: 0.4,
+          zIndex: 0,
+        }}
       />
 
-      {particles}
-
+      {/* Header Section */}
       <motion.div
-        variants={fadeInUp}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        className="relative z-10 text-center mb-20 px-6"
+        initial={{ opacity: 0, y: 30 }}
+        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.8 }}
+        className="text-center mb-16 z-10 relative"
       >
-        <h2 className="text-6xl md:text-7xl font-bold bg-gradient-to-r from-gray-700 to-gray-500 bg-clip-text text-transparent">
+        <h1 className="text-5xl lg:text-6xl font-black text-yellow-400 mb-4 uppercase tracking-wide">
           Why Wellnex?
-        </h2>
-        <p className="text-gray-600 mt-4 text-lg max-w-2xl mx-auto leading-relaxed">
-          Discover how Wellnex is redefining wellness through intelligence, design, and simplicity.
+        </h1>
+        <p className="text-gray-300 text-xl max-w-3xl mx-auto leading-relaxed">
+          Discover the pillars that make Wellnex the future of integrated wellness.
         </p>
       </motion.div>
 
-      <div className="relative z-10 max-w-7xl mx-auto grid md:grid-cols-2 lg:grid-cols-4 gap-10 px-8">
-        {pillars.map((pillar, i) => (
+      {/* Masonry Grid */}
+      <motion.div
+        className="columns-2 lg:columns-4 gap-6 space-y-6"
+        initial={{ opacity: 0 }}
+        animate={isInView ? { opacity: 1 } : {}}
+        transition={{ duration: 0.8, staggerChildren: 0.1 }}
+      >
+        {whyPoints.map((point, i) => (
           <motion.div
             key={i}
-            variants={fadeInUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.1 }}
-            whileHover={{
-              y: -5,
-              scale: 1.02,
-              boxShadow: "0 10px 30px rgba(156,163,175,0.15)",
-            }}
-            className="group relative bg-white/80 backdrop-blur-lg border border-gray-200 shadow-md hover:shadow-lg rounded-3xl p-8 text-center transition-all duration-300 overflow-hidden"
+            variants={cardVariants}
+            custom={i}
+            className="break-inside-avoid bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-yellow-500/20 transition-shadow duration-300 border border-yellow-500/20"
           >
-            <motion.div
-              className="relative mx-auto mb-6 w-20 h-20 flex items-center justify-center rounded-full bg-gray-800 text-white shadow-inner shadow-gray-200"
-              whileHover={{
-                rotate: [0, 5, -5, 0],
-                transition: { duration: 0.6, ease: "easeInOut" },
-              }}
-            >
-              <pillar.icon className="w-10 h-10 z-10" />
-            </motion.div>
-
-            <h3 className="text-xl font-semibold mb-2 text-gray-800 group-hover:text-gray-900 transition-colors">
-              {pillar.title}
-            </h3>
-            <p className="text-gray-600 text-sm leading-relaxed">{pillar.desc}</p>
-
-            <motion.div
-              className="absolute bottom-0 left-0 w-full h-[3px] bg-gray-800 opacity-0 group-hover:opacity-100"
-              initial={{ scaleX: 0 }}
-              whileHover={{ scaleX: 1 }}
-              transition={{ duration: 0.3 }}
-              style={{ originX: 0 }}
+            <img
+              src={point.image}
+              alt={point.title}
+              className="w-full h-48 object-cover"
             />
+            <div className="p-6">
+              <div className="mb-3">
+                {point.icon}
+              </div>
+              <h3 className="text-xl font-bold text-yellow-400 mb-2 uppercase tracking-wide">
+                {point.title}
+              </h3>
+              <p className="text-gray-300 text-sm leading-relaxed">
+                {point.desc}
+              </p>
+            </div>
           </motion.div>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 };
