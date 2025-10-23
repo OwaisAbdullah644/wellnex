@@ -60,7 +60,7 @@ const WhyWellnex = () => {
     >
       <div
         className="absolute inset-0 bg-cover bg-center bg-parallax"
-        style={{ backgroundImage: `url('why.jpg')`, backgroundAttachment: "fixed" }}
+        style={{ backgroundImage: `url('why2.jpg')`, backgroundAttachment: "fixed" }}
       />
       <div className="absolute inset-0 bg-gradient-to-b from-black/80 to-black/50 z-0" />
       <div className="relative z-10 text-center mb-16 max-w-2xl mx-auto">
