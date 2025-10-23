@@ -1,11 +1,12 @@
 import React, { useRef, useEffect, useState } from "react";
 import { motion, useInView } from "framer-motion";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const WhatsComingNext = () => {
   const sectionRef = useRef(null);
   const [timeLeft, setTimeLeft] = useState({ days: 45, hours: 12, minutes: 30, seconds: 0 });
   const isInView = useInView(sectionRef, { threshold: 0.2, once: false });
-  const videoRefs = useRef([]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -22,32 +23,38 @@ const WhatsComingNext = () => {
   }, []);
 
   useEffect(() => {
-    if (isInView) {
-      videoRefs.current.forEach((video) => {
-        if (video) video.play();
+    const ctx = gsap.context(() => {
+      // Parallax for background image
+      gsap.to(".bg-parallax", {
+        yPercent: -20,
+        ease: "none",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: 0.5,
+        },
       });
-    } else {
-      videoRefs.current.forEach((video) => {
-        if (video) video.pause();
-      });
-    }
-  }, [isInView]);
+    });
+
+    return () => ctx.revert();
+  }, []);
 
   const features = [
     {
       title: "Mindful Wearables",
       desc: "Track your peace with smart devices.",
-      media: "mindful.mp4",
+      media: "watch-ai.png",
     },
     {
       title: "Balanced Nutrition",
       desc: "Personalized plans for inner harmony.",
-      media: "balanced.mp4",
+      media: "veg.png",
     },
     {
       title: "Community Wellness",
       desc: "Connect and grow together.",
-      media: "community.mp4",
+      media: "com.png",
     },
   ];
 
@@ -73,7 +80,7 @@ const WhatsComingNext = () => {
       className="relative min-h-screen bg-black text-white overflow-hidden px-6 py-16"
     >
       <div
-        className="absolute inset-0 bg-cover bg-center opacity-40"
+        className="absolute inset-0 bg-cover bg-center bg-parallax"
         style={{ 
           backgroundImage: `url('yoga.jpg')`, 
           backgroundAttachment: "fixed" 
@@ -89,7 +96,7 @@ const WhatsComingNext = () => {
         viewport={{ once: true }}
       >
         <motion.h1 
-          className="text-5xl lg:text-6xl font-bold text-[#FDC700] uppercase tracking-wide leading-tight"
+          className="text-4xl lg:text-6xl  font-bold text-[#FDC700] uppercase tracking-wide leading-tight"
           initial={{ scale: 0.9 }}
           whileInView={{ scale: 1 }}
           transition={{ duration: 0.8 }}
@@ -123,15 +130,11 @@ const WhatsComingNext = () => {
             whileHover={{ scale: 1.03 }}
           >
             <div className="relative w-full h-48 bg-gray-800 rounded-lg overflow-hidden mb-4">
-              <video
-                ref={(el) => (videoRefs.current[i] = el)}
-                loop
-                muted
-                className="absolute inset-0 w-full h-full object-cover"
+              <img
                 src={feature.media}
-              >
-                <source src={feature.media} type="video/mp4" />
-              </video>
+                alt={feature.title}
+                className="absolute inset-0 w-full h-full object-cover"
+              />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
             </div>
             <h3 className="text-xl font-semibold text-[#FDC700] uppercase tracking-wide">

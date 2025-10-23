@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion, useScroll } from 'framer-motion';
-import Navbar from '../pages/Navbar';
-import Footer from '../pages/Footer';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 import Hero from '../components/Hero';
 import About from '../components/About';
 import FlagshipApps from '../components/FlagshipApps';
@@ -31,7 +31,7 @@ const Home = ({ activePage }) => {
   return (
     <div className="min-h-screen bg-gray-50 text-navy">
       <ProgressBar /> 
-      <Navbar activePage="home" />
+      {/* <Navbar activePage="home" />   */}
       <Hero />
       <About />
       <FlagshipApps />
@@ -39,7 +39,7 @@ const Home = ({ activePage }) => {
       <WhatsComingNext />
       <Testimonials />
       <StayConnected />
-      <Footer />
+      {/* <Footer />   */}
     </div>
   );
 };

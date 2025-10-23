@@ -8,15 +8,18 @@ const About = () => {
       <div className="absolute inset-[3%] rounded-[40px] border border-[#FDC700]/40" style={{ boxShadow: `0 0 40px #FDC70040, inset 0 0 20px #FDC70020` }} />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,#FDC70015,transparent_70%),radial-gradient(circle_at_70%_70%,#FDC70010,transparent_80%)]" />
       <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-[#FDC70010] to-transparent relative z-10">
-        <motion.h1 
-          className="text-6xl md:text-7xl font-extrabold bg-gradient-to-r from-[#FDC700] to-[#ffc801] bg-clip-text text-transparent tracking-tight"
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-        >
-          Wellnex Core
-        </motion.h1>
+<div className="flex-1 flex items-center justify-center bg-gradient-to-br from-[#FDC70010] to-transparent relative z-10 px-6 md:px-12">
+  <motion.h1 
+    className="text-6xl md:text-7xl font-extrabold bg-gradient-to-r from-[#FDC700] to-[#ffc801] bg-clip-text text-transparent tracking-tight text-center md:text-left"
+    initial={{ opacity: 0, y: 50 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.8 }}
+    viewport={{ once: true }}
+  >
+    Wellnex Core
+  </motion.h1>
+</div>
+
       </div>
       <div className="flex-1 flex flex-col justify-center px-12 md:px-16 space-y-8 relative z-10">
         {["AI-Driven Workouts", "Precision Mind-Body Mapping", "Golden Era Recovery", "Next-Gen Wellness Tracking"].map((t, i) => (
