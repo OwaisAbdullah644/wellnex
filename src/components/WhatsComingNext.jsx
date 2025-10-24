@@ -2,6 +2,8 @@ import React, { useRef, useEffect, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { comingNextFeatures } from "./WhatsComingNextData"; 
+
 gsap.registerPlugin(ScrollTrigger);
 
 const WhatsComingNext = () => {
@@ -16,7 +18,6 @@ const WhatsComingNext = () => {
 
   const isInView = useInView(sectionRef, { threshold: 0.2, once: false });
 
-  // ⏰ Timer logic (unchanged)
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
@@ -41,7 +42,6 @@ const WhatsComingNext = () => {
     return () => clearInterval(timer);
   }, []);
 
-  // ⚙️ Optimized GSAP parallax for background
   useEffect(() => {
     const bg = bgRef.current;
     const ctx = gsap.context(() => {
@@ -60,12 +60,7 @@ const WhatsComingNext = () => {
     return () => ctx.revert();
   }, []);
 
-  const features = [
-    { title: "Mindful Wearables", desc: "Track your peace with smart devices.", media: "watch-ai.png" },
-    { title: "Balanced Nutrition", desc: "Personalized plans for inner harmony.", media: "veg.png" },
-    { title: "Community Wellness", desc: "Connect and grow together.", media: "com.png" },
-  ];
-
+  // Framer motion variants
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -88,7 +83,6 @@ const WhatsComingNext = () => {
       ref={sectionRef}
       className="relative min-h-screen bg-black text-white overflow-hidden px-6 py-16"
     >
-      {/* 🖼 Background optimized for GPU parallax */}
       <div
         ref={bgRef}
         className="absolute inset-0 bg-cover bg-center will-change-transform"
@@ -96,7 +90,6 @@ const WhatsComingNext = () => {
       />
       <div className="absolute inset-0 bg-black/70 z-0" />
 
-      {/* Header Section */}
       <motion.div
         className="relative z-10 text-center max-w-4xl mx-auto mb-16"
         initial={{ opacity: 0, y: 60 }}
@@ -120,11 +113,10 @@ const WhatsComingNext = () => {
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          Elevate your journey with Wellnex—where mindfulness meets modern technology.
+          Elevate your journey with Wellnex — where mindfulness meets modern technology.
         </motion.p>
       </motion.div>
 
-      {/* Feature Cards */}
       <motion.div
         className="feature-grid max-w-3xl mx-auto grid grid-cols-1 gap-8 z-10 mb-16"
         variants={containerVariants}
@@ -132,7 +124,7 @@ const WhatsComingNext = () => {
         whileInView="visible"
         viewport={{ once: true }}
       >
-        {features.map((feature, i) => (
+        {comingNextFeatures.map((feature, i) => (
           <motion.div
             key={i}
             className="feature-card bg-black/80 rounded-xl p-6 text-center border border-[#FDC700]/20 overflow-hidden shadow-md"
@@ -158,7 +150,6 @@ const WhatsComingNext = () => {
         ))}
       </motion.div>
 
-      {/* CTA */}
       <motion.div
         className="cta-section text-center z-10"
         initial={{ opacity: 0, y: 50 }}
