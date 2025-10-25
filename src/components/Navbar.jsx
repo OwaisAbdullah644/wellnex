@@ -82,7 +82,7 @@ const Navbar = ({ activePage }) => {
 
         {/* 🌍 Navigation Links (Always Gradient) */}
         <div className="hidden md:flex items-center space-x-10">
-          {["Home", "SoulWhisper", "GymKey", "About" ,"Contact"].map((name) => {
+          {["Home", "SoulWhisper", "GymKey", "About" ,"Contact", "Register"].map((name) => {
             const isActive = activePage === name.toLowerCase();
             return (
               <Link
