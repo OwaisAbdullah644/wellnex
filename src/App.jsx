@@ -8,6 +8,8 @@ import FloatingAssistant from './components/FloatingAssistant';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import About from './components/About';
+import AppLayout from './AppLayout';
+import Register from './pages/Register';
 // import Ribbons from './components/Ribbons';
 
 const App = () => {
@@ -24,18 +26,21 @@ const App = () => {
       }}>
         {/* <Ribbons /> */}
       </div>
-        <Navbar/>
       <div style={{ position:'relative', zIndex:1 }}>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path='' element={<AppLayout/>}>
+                    <Route path="/" element={<Home />} />
           <Route path="/soulwhisper" element={<SoulWhispers />} />
           <Route path="/gymkey" element={<GymKey />} />
           <Route path="/contact" element={<Contact />} />
           <Route path='/about' element={<About/>}/>
+          </Route>
+
+          <Route path='/register' element={<Register/>}/>
+          
         </Routes>
         {/* <FloatingAssistant /> */}
       </div>
-      <Footer/>
     </Router>
   );
 };
