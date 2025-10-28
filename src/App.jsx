@@ -24,7 +24,7 @@ const App = () => {
           <Route path='/gymkey' element={<GymKey/>}/>
           <Route path='/about' element={<About/>}/>
          </Route>
-          <Route path='/register' element={<Register/>}/>
+          {/* <Route path='/register' element={<Register/>}/> */}
         </Routes>
     </Router>
   );
