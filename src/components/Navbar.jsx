@@ -82,7 +82,7 @@ const Navbar = ({ activePage }) => {
 
         {/* 🌍 Navigation Links (Always Gradient) */}
         <div className="hidden md:flex items-center space-x-10">
-          {["Home", "SoulWhisper", "GymKey", "About" ,"Contact", "Register"].map((name) => {
+          {["Home", "SoulWhisper", "GymKey", "About" ,"Contact"].map((name) => {
             const isActive = activePage === name.toLowerCase();
             return (
               <Link
@@ -131,7 +131,7 @@ const Navbar = ({ activePage }) => {
             className="md:hidden absolute top-full left-0 w-full bg-black/90 backdrop-blur-lg border-t border-yellow-500/20 z-10"
           >
             <div className="px-4 py-4 space-y-4">
-              {["Home", "SoulWhisper", "GymKey",  "About", "Contact", "Register"].map((name) => (
+              {["Home", "SoulWhisper", "GymKey",  "About", "Contact"].map((name) => (
                 <Link
                   key={name}
                   to={`/${name === "Home" ? "" : name.toLowerCase()}`}
